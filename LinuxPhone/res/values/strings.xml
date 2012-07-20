@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, LinuxPhoneActivity!</string>
     <string name="app_name">LinuxPhone</string>
+    <string name="botonRutaBici">Ruta en bici</string>
 
 </resources>
