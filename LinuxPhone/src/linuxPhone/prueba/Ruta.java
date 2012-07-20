@@ -1,17 +1,20 @@
 package linuxPhone.prueba;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ruta {
 
 	
     private String nombreRuta;
     private int idRuta;
-    private int localImage;
+    private List<Punto> camino;
 
-    public Ruta(int idRuta, String nombreRuta, int localImage) {
+    public Ruta(int idRuta, String nombreRuta) {
             super();
             this.nombreRuta = nombreRuta;
             this.idRuta = idRuta;
-            this.localImage = localImage;
+            this.camino = new ArrayList<Punto>();
     }
 
     public int getIdRuta() {
@@ -29,12 +32,9 @@ public class Ruta {
     public void setNombreRuta(String nombreRuta) {
             this.nombreRuta = nombreRuta;
     }
-
-    public int getLocalImage() {
-            return localImage;
+    
+    public void anyadirPuntoARuta (Punto punto){
+    	camino.add(punto);
     }
 
-    public void setLocalImage(int i) {
-            this.localImage = i;
-    }
 }

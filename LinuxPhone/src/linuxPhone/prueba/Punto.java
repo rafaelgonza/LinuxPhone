@@ -3,19 +3,19 @@ package linuxPhone.prueba;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Puntos implements Parcelable{
+public class Punto implements Parcelable{
 	
     private int idPunto;
     private double lon;
     private double lat;
 
-    public Puntos(Parcel in) {
+    public Punto(Parcel in) {
             this.idPunto = in.readInt();
             this.lon = in.readDouble();
             this.lat = in.readDouble();
     }
 
-    public Puntos(int idPunto, double lon, double lat) {
+    public Punto(int idPunto, double lon, double lat) {
             super();
             this.idPunto = idPunto;
             this.lon = lon;
@@ -46,13 +46,13 @@ public class Puntos implements Parcelable{
             this.lat = lat;
     }
 
-    public static final Parcelable.Creator<Puntos> CREATOR = new Parcelable.Creator<Puntos>() {
-            public Puntos createFromParcel(Parcel in) {
-                    return new Puntos(in);
+    public static final Parcelable.Creator<Punto> CREATOR = new Parcelable.Creator<Punto>() {
+            public Punto createFromParcel(Parcel in) {
+                    return new Punto(in);
             }
 
-            public Puntos[] newArray(int size) {
-                    return new Puntos[size];
+            public Punto[] newArray(int size) {
+                    return new Punto[size];
             }
     };
 
