@@ -9,5 +9,11 @@
     <string name="configuracion">Configuracion</string>
     <string name="menucomienzorutabici">Comenzar</string>
     <string name="menupararrutabici">Parar</string>
+    <string name="cronometro"></string>
+    <string name="botonComenzar">Comenzar</string>
+    <string name="botonParar">Parar</string>
+    <string name="mediumText">Medium Text</string>
+    <string name="menuGuardarPie">Guardar ruta</string>
+    <string name="menuCambiarVista">Cambiar vista</string>
 
 </resources>

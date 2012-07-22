@@ -1,20 +1,30 @@
 package linuxPhone.prueba;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.osmdroid.util.GeoPoint;
 
 public class Ruta {
 
 	
     private String nombreRuta;
     private int idRuta;
-    private List<Punto> camino;
+    public List<GeoPoint> getCamino() {
+		return camino;
+	}
+
+	public void setCamino(List<GeoPoint> camino) {
+		this.camino = camino;
+	}
+
+	private List<GeoPoint> camino;
 
     public Ruta(int idRuta, String nombreRuta) {
             super();
             this.nombreRuta = nombreRuta;
             this.idRuta = idRuta;
-            this.camino = new ArrayList<Punto>();
+            this.camino = new LinkedList<GeoPoint>();
     }
 
     public int getIdRuta() {
@@ -33,7 +43,7 @@ public class Ruta {
             this.nombreRuta = nombreRuta;
     }
     
-    public void anyadirPuntoARuta (Punto punto){
+    public void anyadirPuntoARuta (GeoPoint punto){
     	camino.add(punto);
     }
 

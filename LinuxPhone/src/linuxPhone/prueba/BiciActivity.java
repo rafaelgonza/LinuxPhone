@@ -50,7 +50,7 @@ public class BiciActivity extends Activity implements LocationListener {
 		myOpenMapView = (MapView) findViewById(R.id.openmapview);
 		myOpenMapView.setBuiltInZoomControls(true);
 		myMapController = myOpenMapView.getController();
-		myMapController.setZoom(14);
+		myMapController.setZoom(5);
 		myMapController.setCenter(new GeoPoint(-3, -79));
 
 		myOpenMapView.setMultiTouchControls(true);
@@ -92,7 +92,7 @@ public class BiciActivity extends Activity implements LocationListener {
 				idPuntoRuta++;
 				Punto puntoRuta = new Punto(idPuntoRuta,
 						location.getLongitude(), location.getLatitude());
-				ruta.anyadirPuntoARuta(puntoRuta);
+				//ruta.anyadirPuntoARuta(puntoRuta);
 				//Intento de pintado de linea
 				lineaOverlay.addPoint(punto);
 				myOpenMapView.getOverlays().add(lineaOverlay);

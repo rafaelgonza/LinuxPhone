@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <Chronometer
+        android:id="@+id/cronometro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/cronometro"
+        android:textSize="25dp" />
+
+    <FrameLayout
+        android:id="@+id/contenedorMapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cronometro"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="10dp"
+        android:visibility="visible" >
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/openmapview"
+            android:layout_width="312dp"
+            android:layout_height="375dp" >
+        </org.osmdroid.views.MapView>
+
+        <LinearLayout
+            android:id="@+id/contenedorDatos"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewDistancia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mediumText"
+                android:layout_marginTop="30dp"
+                android:background="#ffffffff"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/textViewVelocidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/mediumText"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="25dp" />
+
+            <TextView
+                android:id="@+id/textViewVelocidadMedia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/mediumText"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="25dp" />
+        </LinearLayout>
+    </FrameLayout>
+    <Button
+        android:id="@+id/buttonComenzarPie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/contenedorMapa"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/cronometro"
+        android:text="@string/botonComenzar" />
+
+    <Button
+        android:id="@+id/buttonPararPie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/contenedorMapa"
+        android:layout_alignTop="@+id/buttonComenzarPie"
+        android:layout_toRightOf="@+id/cronometro"
+        android:text="@string/botonParar" />
+
+    
+
+</RelativeLayout>

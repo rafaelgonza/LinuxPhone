@@ -34,10 +34,10 @@ public class LinuxPhoneActivity extends Activity {
 		botonPie.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// Intent intent = new Intent(getApplicationContext(),
-				// BiciActivity.class);
-				// startActivity(intent);
+				//TODO Auto-generated method stub
+				Intent intent = new Intent(getApplicationContext(),
+				PieActivity.class);
+				startActivity(intent);
 
 			}
 		});
