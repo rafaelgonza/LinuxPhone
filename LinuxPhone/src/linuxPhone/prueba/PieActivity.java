@@ -183,27 +183,32 @@ public class PieActivity extends Activity {
 
 		if (estado != "inactivo") {
 
-			lineaOverlay.addPoint(punto);
-			myOpenMapView.getOverlays().add(lineaOverlay);
+			if (ruta.getCamino().size() > 0) {
 
-			distancia = calculaDistancia(punto,
-					ruta.getCamino().get(ruta.getCamino().size() - 1));
-			distanciaTotal = calculaDistancia(punto, ruta.getCamino().get(0));
+				lineaOverlay.addPoint(punto);
+				myOpenMapView.getOverlays().add(lineaOverlay);
 
-			velocidad = calculaVelocidad(distancia, instanteActual
-					- instanteAnterior);
-			velocidadMedia = calculaVelocidad(distanciaTotal, instanteActual
-					- instanteInicial);
+				distancia = calculaDistancia(punto,
+						ruta.getCamino().get(ruta.getCamino().size() - 1));
+				distanciaTotal = calculaDistancia(punto, ruta.getCamino()
+						.get(0));
+
+				velocidad = calculaVelocidad(distancia, instanteActual
+						- instanteAnterior);
+				velocidadMedia = calculaVelocidad(distanciaTotal,
+						instanteActual - instanteInicial);
+
+				TextView distanciaText = (TextView) findViewById(R.id.textViewDistancia);
+				TextView velocidadText = (TextView) findViewById(R.id.textViewVelocidad);
+				TextView velocidadMediaText = (TextView) findViewById(R.id.textViewVelocidadMedia);
+
+				distanciaText.setText("Distancia: " + distanciaTotal);
+				velocidadText.setText("Velocidad: " + velocidad);
+				velocidadMediaText
+						.setText("Velocidad media: " + velocidadMedia);
+			}
 			ruta.anyadirPuntoARuta(punto);
-
-			TextView distanciaText = (TextView) findViewById(R.id.textViewDistancia);
-			TextView velocidadText = (TextView) findViewById(R.id.textViewVelocidad);
-			TextView velocidadMediaText = (TextView) findViewById(R.id.textViewVelocidadMedia);
-
-			distanciaText.setText("Distancia: " + distanciaTotal);
-			velocidadText.setText("Velocidad: " + velocidad);
-			velocidadMediaText.setText("Velocidad media: " + velocidadMedia);
-			//asdfasdfasd
+			// asdfasdfasd
 
 		}
 
@@ -256,23 +261,22 @@ public class PieActivity extends Activity {
 			TextView distancia = (TextView) findViewById(R.id.textViewDistancia);
 			TextView velocidad = (TextView) findViewById(R.id.textViewVelocidad);
 			TextView velocidadMedia = (TextView) findViewById(R.id.textViewVelocidadMedia);
-			
-			
+
 			if (mapa.getVisibility() == View.VISIBLE) {
 				mapa.setVisibility(View.GONE);
-				contenedorMapa.setVisibility(View.GONE);
+				// contenedorMapa.setVisibility(View.GONE);
 				contenedorDatos.setVisibility(View.VISIBLE);
-				distancia.setVisibility(View.VISIBLE);
-				velocidad.setVisibility(View.VISIBLE);
-				velocidadMedia.setVisibility(View.VISIBLE);
+				// distancia.setVisibility(View.VISIBLE);
+				// velocidad.setVisibility(View.VISIBLE);
+				// velocidadMedia.setVisibility(View.VISIBLE);
 			} else {
-				
+
 				contenedorDatos.setVisibility(View.INVISIBLE);
-				distancia.setVisibility(View.INVISIBLE);
-				velocidad.setVisibility(View.INVISIBLE);
-				velocidadMedia.setVisibility(View.INVISIBLE);
+				// distancia.setVisibility(View.INVISIBLE);
+				// velocidad.setVisibility(View.INVISIBLE);
+				// velocidadMedia.setVisibility(View.INVISIBLE);
 				mapa.setVisibility(View.VISIBLE);
-				contenedorMapa.setVisibility(View.VISIBLE);
+				// contenedorMapa.setVisibility(View.VISIBLE);
 			}
 
 			return true;
