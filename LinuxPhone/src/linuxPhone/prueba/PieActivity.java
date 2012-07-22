@@ -203,6 +203,7 @@ public class PieActivity extends Activity {
 			distanciaText.setText("Distancia: " + distanciaTotal);
 			velocidadText.setText("Velocidad: " + velocidad);
 			velocidadMediaText.setText("Velocidad media: " + velocidadMedia);
+			//asdfasdfasd
 
 		}
 
