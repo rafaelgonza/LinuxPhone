@@ -257,9 +257,9 @@ public class PieActivity extends Activity {
 			TextView velocidadMedia = (TextView) findViewById(R.id.textViewVelocidadMedia);
 			
 			
-			if (mapa.getVisibility() == 0) {
-				mapa.setVisibility(View.INVISIBLE);
-				contenedorMapa.setVisibility(View.INVISIBLE);
+			if (mapa.getVisibility() == View.VISIBLE) {
+				mapa.setVisibility(View.GONE);
+				contenedorMapa.setVisibility(View.GONE);
 				contenedorDatos.setVisibility(View.VISIBLE);
 				distancia.setVisibility(View.VISIBLE);
 				velocidad.setVisibility(View.VISIBLE);
