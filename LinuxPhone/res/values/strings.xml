@@ -15,5 +15,6 @@
     <string name="mediumText">Medium Text</string>
     <string name="menuGuardarPie">Guardar ruta</string>
     <string name="menuCambiarVista">Cambiar vista</string>
+    <string name="menuGuardarBici">Guardar</string>
 
 </resources>

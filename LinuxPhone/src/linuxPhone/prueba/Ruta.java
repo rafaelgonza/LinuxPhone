@@ -44,7 +44,7 @@ public class Ruta {
     }
     
     public void anyadirPuntoARuta (GeoPoint punto){
-    	camino.add(punto);
+    	this.camino.add(punto);
     }
 
 }

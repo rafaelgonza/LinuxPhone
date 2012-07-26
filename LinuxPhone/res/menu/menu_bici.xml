@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/salirBici" android:title="@string/salir"></item>
+        <item android:id="@+id/guardarBici" android:title="@string/menuGuardarBici"></item>
+        <item android:id="@+id/menuCambiarVistaBici" android:title="@string/menuCambiarVista"></item>
+    </menu>

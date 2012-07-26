@@ -24,8 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BiciActivity"></activity>
         <activity android:name="PieActivity"></activity>
+        <activity android:name="BiciActivity"></activity>
     </application>
 
 </manifest>

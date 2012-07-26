@@ -67,8 +67,8 @@ public class PieActivity extends Activity {
 		myOpenMapView = (MapView) findViewById(R.id.openmapview);
 		myOpenMapView.setBuiltInZoomControls(true);
 		myMapController = myOpenMapView.getController();
-		myMapController.setZoom(5);
-		myMapController.setCenter(new GeoPoint(-3, -79));
+		myMapController.setZoom(0);
+		myMapController.setCenter(new GeoPoint(0, 0));
 
 		myOpenMapView.setMultiTouchControls(true);
 
