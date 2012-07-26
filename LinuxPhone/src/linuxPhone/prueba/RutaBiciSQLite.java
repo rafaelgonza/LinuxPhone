@@ -17,8 +17,10 @@ public class RutaBiciSQLite extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase arg0) {
+	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
+		
+		db.execSQL(sqlCreate);
 		
 	}
 
