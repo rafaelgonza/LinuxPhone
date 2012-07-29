@@ -6,9 +6,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class RutaBiciSQLite extends SQLiteOpenHelper {
-	
-	String sqlCreate = "CREATE TABLE RutaBici (nombre TEXT, ruta List<Puntos>)";
-	
+
+	String sqlCreate = "CREATE TABLE RutaBici (nombre TEXT, velocidad FLOAT, velocidadMaxima FLOAT, distancia FLOAT)";
 
 	public RutaBiciSQLite(Context context, String name, CursorFactory factory,
 			int version) {
@@ -19,15 +18,15 @@ public class RutaBiciSQLite extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		
+
 		db.execSQL(sqlCreate);
-		
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

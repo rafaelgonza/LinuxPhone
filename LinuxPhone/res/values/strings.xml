@@ -16,5 +16,10 @@
     <string name="menuGuardarPie">Guardar ruta</string>
     <string name="menuCambiarVista">Cambiar vista</string>
     <string name="menuGuardarBici">Guardar</string>
+    <string name="nombreRutaAIntroducir">"Introduzca el nombre: "</string>
+    <string name="botonCancelarGuardar">Cancelar</string>
+    <string name="cargarRuta">Cargar</string>
+    <string name="seleccinaRutaACargar">Seleccione ruta:</string>
+    <string name="menuCargarRuta">Cargar</string>
 
 </resources>

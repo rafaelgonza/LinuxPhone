@@ -1,5 +1,14 @@
 package linuxPhone.prueba;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -7,11 +16,16 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.SimpleLocationOverlay;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -19,17 +33,22 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,15 +107,15 @@ public class BiciActivity extends Activity {
 
 		// Dibujar linea
 
-		 Paint mPaint = new Paint();
-		 mPaint.setDither(true);
-		
-		 mPaint.setColor(Color.BLUE);
-		
-		 mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-		 mPaint.setStrokeJoin(Paint.Join.ROUND);
-		 mPaint.setStrokeCap(Paint.Cap.ROUND);
-		 mPaint.setStrokeWidth(6);
+		Paint mPaint = new Paint();
+		mPaint.setDither(true);
+
+		mPaint.setColor(Color.BLUE);
+
+		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+		mPaint.setStrokeJoin(Paint.Join.ROUND);
+		mPaint.setStrokeCap(Paint.Cap.ROUND);
+		mPaint.setStrokeWidth(6);
 
 		this.lineaOverlay = new PathOverlay(Color.BLUE, mResourceProxy);
 		lineaOverlay.setPaint(mPaint);
@@ -224,19 +243,11 @@ public class BiciActivity extends Activity {
 		instanteActual = SystemClock.elapsedRealtime();
 
 		if (estado != "inactivo") {
-			if (contador == 0) {//Mirar que hacemos con esto
+			if (contador == 0) {// Mirar que hacemos con esto
 				if (ruta.getCamino().size() > 1) {
 
-					 lineaOverlay.addPoint(punto);
+					lineaOverlay.addPoint(punto);
 					myOpenMapView.getOverlays().add(lineaOverlay);
-//					PintarLineaMapa pintar = new PintarLineaMapa(
-//							getApplicationContext());
-//					pintar.parametrosOverlay(
-//							ruta.getCamino().get(ruta.getCamino().size() - 2),
-//							ruta.getCamino().get(ruta.getCamino().size() - 1));
-//
-//					myOpenMapView.getOverlays().add(pintar);
-//					myOpenMapView.postInvalidate();
 
 					distancia = (int) calculaDistancia(
 							ruta.getCamino().get(ruta.getCamino().size() - 1),
@@ -299,14 +310,211 @@ public class BiciActivity extends Activity {
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
+
 		switch (item.getItemId()) {
 		case R.id.salirBici:
 			finish();
 			return true;
 		case R.id.guardarBici:
-			// Intent configuracion = new Intent(getApplicationContext(),
-			// MenuConfiguracion.class);
-			// startActivity(configuracion);
+			LinearLayout contenedorGuardar = (LinearLayout) findViewById(R.id.contenedorGuardarRuta);
+			org.osmdroid.views.MapView mapa2 = (org.osmdroid.views.MapView) findViewById(R.id.openmapviewBici);
+			final Button btnStart = (Button) findViewById(R.id.buttonComenzarBici);
+
+			mapa2.setVisibility(View.GONE);
+			contenedorGuardar.setVisibility(View.VISIBLE);
+
+			memoTiempo = SystemClock.elapsedRealtime();
+			tiempo.stop();
+			estado = "pausado";
+			btnStart.setText("Continuar");
+
+			final Button btnguardar = (Button) findViewById(R.id.buttonGuardarRuta);
+
+			btnguardar.setOnClickListener(new OnClickListener() {
+
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					boolean sdDisponible = false, sdAccesoEscritura = false;
+					String estado = Environment.getExternalStorageState();
+
+					if (estado.equals(Environment.MEDIA_MOUNTED)) {
+						sdDisponible = true;
+						sdAccesoEscritura = true;
+					} else if (estado
+							.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+						sdDisponible = true;
+						sdAccesoEscritura = false;
+						Toast toast = Toast.makeText(getApplicationContext(),
+								"ERROR: SD SOLO LECTURA", Toast.LENGTH_SHORT);
+						toast.show();
+					} else {
+						sdDisponible = false;
+						sdAccesoEscritura = false;
+						Toast toast = Toast.makeText(getApplicationContext(),
+								"ERROR: SD NO DISPONIBLE", Toast.LENGTH_SHORT);
+						toast.show();
+					}
+					if (sdDisponible && sdAccesoEscritura) {
+
+						// Abrimos la base de datos en modo
+						// escritura
+						RutaBiciSQLite usdbh = new RutaBiciSQLite(
+								getApplicationContext(), "RutasBici", null, 1);
+						SQLiteDatabase db = usdbh.getWritableDatabase();
+
+						EditText nombreRuta = (EditText) findViewById(R.id.editTextNombreRutaAGuardar);
+						List<GeoPoint> rutaCamino = ruta.getCamino();
+						String nombreR = nombreRuta.getText().toString();
+
+						// Si hemos abierto correctamente la base de datos
+						if (db != null) {
+
+							// Insertamos los datos en la tabla Usuarios
+							db.execSQL("INSERT INTO RutaBici (nombre, velocidad, velocidadMaxima, distancia) VALUES (\""
+									+ nombreR + "\", 1, 2, 10)");
+
+							// Cerramos la base de datos
+							db.close();
+							// Creamos el fichero
+							try {
+								CreacionRutaKML fichero = new CreacionRutaKML(
+										nombreRuta.getText().toString(),
+										rutaCamino);
+							} catch (IllegalArgumentException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalStateException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						LinearLayout contenedorGuardar = (LinearLayout) findViewById(R.id.contenedorGuardarRuta);
+						org.osmdroid.views.MapView mapa2 = (org.osmdroid.views.MapView) findViewById(R.id.openmapviewBici);
+						nombreRuta.setText("");
+						Toast toast = Toast.makeText(getApplicationContext(),
+								"Ruta: " + nombreR + " GUARDADA",
+								Toast.LENGTH_SHORT);
+						toast.show();
+						mapa2.setVisibility(View.VISIBLE);
+						contenedorGuardar.setVisibility(View.GONE);
+
+					}
+
+				}
+			});
+
+			return true;
+		case R.id.cargarRuta:
+
+			ListView ListaRutas = (ListView) findViewById(R.id.listViewListaRutas);
+			LinearLayout contenedorDatos3 = (LinearLayout) findViewById(R.id.contenedorCargarRuta);
+			org.osmdroid.views.MapView mapa3 = (org.osmdroid.views.MapView) findViewById(R.id.openmapviewBici);
+
+			RutaBiciSQLite usdbh = new RutaBiciSQLite(getApplicationContext(),
+					"RutasBici", null, 1);
+			SQLiteDatabase db = usdbh.getReadableDatabase();
+
+			// Si hemos abierto correctamente la base de datos
+			if (db != null) {
+
+				Cursor c = db.rawQuery(" SELECT nombre FROM RutaBici", null);
+				final String[] datos = new String[c.getCount()];
+				int i = 0;
+
+				// Nos aseguramos de que existe al menos un registro
+				if (c.moveToFirst()) {
+					// Recorremos el cursor hasta los registros
+					do {
+						String nombRuta = c.getString(0);
+						datos[i] = nombRuta;
+						i++;
+					} while (c.moveToNext());
+				}
+				c.close();
+				db.close();
+				ArrayAdapter<String> adaptador = new ArrayAdapter<String>(
+						getApplicationContext(),
+						android.R.layout.simple_list_item_1, datos);
+
+				ListaRutas.setAdapter(adaptador);
+
+				ListaRutas.setOnItemClickListener(new OnItemClickListener() {
+
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+						// TODO Auto-generated method stub
+						String seleccion;
+						seleccion = datos[arg2];
+						Toast toast2 = Toast.makeText(getApplicationContext(),
+								"" + seleccion + "",
+								Toast.LENGTH_SHORT);
+						toast2.show();
+
+						boolean sdDisponible = false;
+						String estado = Environment.getExternalStorageState();
+
+						if (estado.equals(Environment.MEDIA_MOUNTED)) {
+							sdDisponible = true;
+						} else {
+							sdDisponible = false;
+							Toast toast = Toast.makeText(
+									getApplicationContext(),
+									"ERROR: SD NO DISPONIBLE",
+									Toast.LENGTH_SHORT);
+							toast.show();
+						}
+						if (sdDisponible) {
+
+							try {
+								File ruta_sd = Environment
+										.getExternalStorageDirectory();
+
+								File f = new File(ruta_sd.getAbsolutePath(),
+										seleccion);
+
+								FileInputStream fich = new FileInputStream(f);
+
+								DocumentBuilderFactory factory = DocumentBuilderFactory
+										.newInstance();
+
+								DocumentBuilder builder = factory
+										.newDocumentBuilder();
+								Document dom = builder.parse(fich);
+								Element root = (Element) dom.getDocumentElement();
+								NodeList items = root.getElementsByTagName("Point");
+								
+								List<GeoPoint> rutaCargada = new LinkedList<GeoPoint>();
+								for (int i =0; i<items.getLength(); i++){
+									
+									Node nodo = items.item(i);
+									Node nodoLatitud = nodo.getFirstChild();
+									Node nodoLongitud = nodo.getLastChild();
+									Double latitud = Double.valueOf(nodoLatitud.getNodeValue());
+									Double longitud = Double.valueOf(nodoLongitud.getNodeValue());
+									
+									GeoPoint punto = new GeoPoint(latitud, longitud);
+									rutaCargada.add(punto);
+									
+								}
+								System.out.print(rutaCargada.toString());
+
+							} catch (Exception ex) {
+								Log.e("Ficheros",
+										"Error al leer fichero desde tarjeta SD");
+							}
+						}
+					}
+
+				});
+
+			}
+
+			mapa3.setVisibility(View.GONE);
+			contenedorDatos3.setVisibility(View.VISIBLE);
+
 			return true;
 		case R.id.menuCambiarVistaBici:
 
